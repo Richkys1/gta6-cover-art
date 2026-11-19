@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vice Cover Studio — GTA-style cover art maker</title>
+<meta name="description" content="Turn your photo and a caption into GTA-style multi-panel cover art, in your own design, and export it as a PNG. Works offline.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">VCS</span>
+    <div>
+      <h1>Vice Cover Studio</h1>
+      <p class="tagline">Your photo + a caption &rarr; poster-style cover art. Photos never leave your machine.</p>
+    </div>
+  </div>
+  <div class="top-actions">
+    <label class="upload-btn" for="upload">+ Add photos</label>
+    <input id="upload" type="file" accept="image/*" multiple hidden>
+    <button id="export" type="button" class="export-btn">Export PNG</button>
+  </div>
+</header>
+
+<main class="workspace">
+  <aside class="controls" aria-label="Cover controls">
+    <section>
+      <h2>1 · Photos</h2>
+      <p class="hint">Click a thumb to place it in the selected panel. Drag &amp; drop files anywhere on the drop zone.</p>
+      <div id="dropzone" class="dropzone">Drop photos here<br><span>or use + Add photos</span></div>
+      <div id="photostrip" class="photostrip" aria-label="Loaded photos"></div>
+    </section>
+
+    <section>
+      <h2>2 · Layout</h2>
+      <div id="layouts" class="choices" role="group" aria-label="Panel layout"></div>
+      <p class="hint">Click a panel in the preview to select it, then drag to pan its photo and scroll to zoom.</p>
+      <label class="field">Zoom selected panel
+        <input id="zoom" type="range" min="1" max="4" step="0.05" value="1">
+      </label>
+      <button id="resetpan" type="button" class="ghost-btn">Reset pan &amp; zoom</button>
+    </section>
+
+    <section>
+      <h2>3 · Caption</h2>
+      <label class="field">Main title
+        <input id="title" type="text" value="Sunset Heist" maxlength="48" autocomplete="off">
+      </label>
+      <label class="field">Subtitle / tagline
+        <input id="subtitle" type="text" value="Vice City Nights" maxlength="64" autocomplete="off">
+      </label>
+      <label class="field">Title size
+        <input id="titlesize" type="range" min="72" max="190" step="2" value="120">
+      </label>
+      <label class="field">Title position
+        <select id="captionpos">
+          <option value="top">Top of cover</option>
+          <option value="bottom">Bottom of cover</option>
+        </select>
+      </label>
+    </section>
+
+    <section>
+      <h2>4 · Colour grade</h2>
+      <div id="grades" class="choices" role="group" aria-label="Colour grade"></div>
+    </section>
+
+    <section>
+      <h2>5 · Export</h2>
+      <label class="field">Export size
+        <select id="exportsize"></select>
+      </label>
+      <p class="hint">One click downloads the cover as a PNG at the size above — square, portrait or landscape.</p>
+    </section>
+  </aside>
+
+  <section class="preview" aria-label="Live preview">
+    <div class="stage-wrap">
+      <canvas id="stage" width="1080" height="1080"></canvas>
+    </div>
+    <p id="readout" class="readout" aria-live="polite"></p>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>Vice Cover Studio — an original cover maker. No Rockstar Games logo, artwork, character or font is used. Sample photos are free to use; your own photos stay on your machine.</p>
+</footer>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
+
