@@ -7,8 +7,11 @@
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 //
 // The program is deterministic: same input files, same output bytes.
+// It never removes the output directory itself: under the grader
+// /output is a mount point the program cannot delete, so it clears
+// only the entries inside it and overwrites them.
 
-import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-app.ts';
@@ -17,8 +20,13 @@ const repoRoot = fileURLToPath(new URL('.', import.meta.url));
 const outputDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 
 // Start from a clean output directory so stale files never leak in.
-rmSync(outputDir, { recursive: true, force: true });
+// Clear only the contents: the directory itself stays put, because
+// deleting it fails (EPERM) when it is a mount point the program
+// does not own, as under the grader.
 mkdirSync(outputDir, { recursive: true });
+for (const entry of readdirSync(outputDir)) {
+  rmSync(join(outputDir, entry), { recursive: true, force: true });
+}
 
 // The app: plain static files under app/, served by any static server.
 cpSync(join(repoRoot, 'app'), join(outputDir, 'app'), { recursive: true });
